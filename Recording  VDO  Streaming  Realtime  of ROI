@@ -1,0 +1,80 @@
+#When you want test code  push  Ctrl+A > Ctrl+C > Ctrl+V 
+#When you paste code give warning error  python indentationerror expected an indented block 
+#give you space from you tool run python  
+#for IDLE python , format > Untabify Region > 4 > ok 
+#### for Sublime Text3 
+> Preference > Setting Syntax specific > copy  
+{
+	"tab_size": 4,
+    "translate_tabs_to_spaces": true
+}
+####
+> save
+
+#pip install  opencv-python
+import cv2
+#pip install numpy
+import numpy as np 
+
+#Read video
+cap = cv2.VideoCapture(0)
+# 0 is Read VDO from default camera ,  1 is read video when you connect webcam 
+
+#Define the codes and create VideoWriter object
+fourcc = cv2.VideoWriter_fourcc(*'XVID')
+
+#out is when you need save vdo in name and frame rate 
+out = cv2.VideoWriter('2752562.avi',fourcc,15.0,(140,480)) 
+#2752562 is name file you record
+# 15.0 is frame rate from camare you can adjust frame rate  up to you need
+
+# 140 is 250 to 390 
+# 480 is  0 to 480
+
+#Create ROI  ROI is Region of iterest 
+# 250 is value point of axis x is value one
+# 390 is value point of axis x is value two
+# 0  is value point of axis y is value one
+# 480 is value point of axis y is value two
+
+upper_left = (250,0)   
+bottom_right = (390,480)
+
+
+while (cap.isOpened()):
+    ret , frame = cap.read()
+    
+    #check value ret send return value is True , Not true is break
+    if ret == True:
+       
+        #Create rectangle in frame , (100,50,200) is value of color and 5 is thickness of line color  
+        r = cv2.rectangle(frame, upper_left, bottom_right, (100, 50, 200), 5)
+        
+        #Create frame rectangle from  you set point
+        rect_img = frame[upper_left[1] : bottom_right[1], upper_left[0] : bottom_right[0]]
+        #upper_left[1] is value 0
+        #bottom_right[1] is value 480
+        #upper_left[0] is value 250
+        #bottom_right[0] is value 390
+        
+        #out is command save vdo area you set
+        out.write(rect_img) 
+        
+        #Show  vdo from area you
+        cv2.imshow("t",rect_img)
+        
+        #Show area roi when you want check roi is correct from you want to create roi
+        #cv2.imshow("ROI",roi)
+        
+        #Show frame from carema 
+        #cv2.imshow("FRAME",frame)
+
+        #when you push q program is stop
+        if(cv2.waitKey(1) & 0xFF == ord("q")):
+            break
+    else:
+        break
+        
+cap.release()
+out.release()
+cv2.destroyAllWindows()
